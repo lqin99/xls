@@ -1,1 +1,60 @@
-test
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+	$.ajax({
+		type: "GET",
+		url:"data2.csv",
+		dataType: "text",
+		success: function(data) {processData(data);}
+	});
+	function processData( allText ) {
+		var allLinesArray = allText.split("\n");
+		if( allLinesArray.length > 0 ){
+			var dataPoints = [];
+			for (var i = 0; i <= allLinesArray.length-1; i++) {
+				var rowData = allLinesArray[i].split(",");
+				dataPoints.push({ label:rowData[0], y:parseInt(rowData[2]) });
+			}
+			drawChart(dataPoints);
+		}
+	}
+	function drawChart( dataPoints) {
+		var chart = new CanvasJS.Chart("chartContainer", {
+			title:{
+				text: "ID"
+			},
+			axisX:{
+				labelAngle: 0,
+				labelWrap:true,
+				labelAutoFit: false,
+				labelFontSize: 15,
+				labelMaxWidth: 200,
+				labelFontColor: "black"
+			},
+			data: [
+			{
+				indexLabelPlacement: "outside",
+				indexLabelFontWeight: "bold",
+				indexLabelFontColor: "black",
+				type: "column",
+				dataPoints: dataPoints
+			}
+			]
+		});
+		chart.render();
+	}
+});
+</script>
+<script type="text/javascript" src="canvasjs.min.js"></script> 
+
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<center><b>This a test text</b></center>
+</body>
+</html>
